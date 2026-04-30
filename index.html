@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farbrors kundkontakter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .contacts-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .contacts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .contacts-header h2 {
+            color: #333;
+        }
+
+        .search-box {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            width: 250px;
+        }
+
+        .contact-list {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            padding: 5px 12px;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .stats {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            color: #666;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            th, td {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .contacts-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📞 Farbrors kundkontakter</h1>
+            <p>Lägg till kunder du mejlat - så ser farbror vem han ska ringa</p>
+        </div>
+
+        <div class="form-card">
+            <h2 style="margin-bottom: 20px; color: #333;">✉️ Lägg till ny kontakt</h2>
+            <div class="form-group">
+                <label>📧 E-postadress:</label>
+                <input type="email" id="emailInput" placeholder="t.ex. kund@exempel.se">
+            </div>
+            <div class="form-group">
+                <label>📱 Telefonnummer:</label>
+                <input type="tel" id="phoneInput" placeholder="t.ex. 0701234567">
+            </div>
+            <button onclick="addContact()">➕ Lägg till kontakt</button>
+        </div>
+
+        <div class="contacts-card">
+            <div class="contacts-header">
+                <h2>📋 Kontakter jag har mejlat</h2>
+                <input type="text" class="search-box" id="searchInput" placeholder="🔍 Sök på e-post eller telefon..." onkeyup="searchContacts()">
+            </div>
+            <div class="contact-list">
+                <table id="contactTable">
+                    <thead>
+                        <tr>
+                            <th>📧 E-post</th>
+                            <th>📱 Telefon</th>
+                            <th>🎯 Åtgärd</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactTableBody">
+                        <tr>
+                            <td colspan="3" class="empty-state">Inga kontanter ännu. Lägg till din första ovan! ✨</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="stats" id="stats">
+                Visar 0 kontakter
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ladda kontakter från localStorage eller börja med tom array
+        let contacts = [];
+
+        // Ladda sparade kontakter när sidan laddas
+        function loadContacts() {
+            const saved = localStorage.getItem('farbrorsContacts');
+            if (saved) {
+                contacts = JSON.parse(saved);
+            }
+            displayContacts();
+        }
+
+        // Spara kontakter till localStorage
+        function saveContacts() {
+            localStorage.setItem('farbrorsContacts', JSON.stringify(contacts));
+        }
+
+        // Lägg till ny kontakt
+        function addContact() {
+            const email = document.getElementById('emailInput').value.trim();
+            const phone = document.getElementById('phoneInput').value.trim();
+            
+            // Validera
+            if (!email) {
+                alert('❌ Var god fyll i e-postadress!');
+                return;
+            }
+            
+            if (!phone) {
+                alert('❌ Var god fyll i telefonnummer!');
+                return;
+            }
+            
+            // Kolla om e-post redan finns
+            const exists = contacts.find(c => c.email.toLowerCase() === email.toLowerCase());
+            if (exists) {
+                alert('⚠️ Den här e-postadressen finns redan i listan!');
+                return;
+            }
+            
+            // Lägg till ny kontakt
+            contacts.push({
+                email: email,
+                phone: phone,
+                date: new Date().toLocaleDateString('sv-SE')
+            });
+            
+            // Spara och uppdatera
+            saveContacts();
+            displayContacts();
+            
+            // Rensa inputfälten
+            document.getElementById('emailInput').value = '';
+            document.getElementById('phoneInput').value = '';
+            
+            // Fokusera tillbaka på email-fältet
+            document.getElementById('emailInput').focus();
+            
+            alert('✅ Kontakt tillagd! Nu kan farbror se numret.');
+        }
+        
+        // Ta bort kontakt
+        function deleteContact(index) {
+            if (confirm('Är du säker på att du vill ta bort den här kontakten?')) {
+                contacts.splice(index, 1);
+                saveContacts();
+                displayContacts();
+            }
+        }
+        
+        // Sökfunktion
+        function searchContacts() {
+            displayContacts();
+        }
+        
+        // Visa alla kontakter i tabellen
+        function displayContacts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tbody = document.getElementById('contactTableBody');
+            
+            // Filtrera kontakter baserat på sökning
+            let filteredContacts = contacts;
+            if (searchTerm) {
+                filteredContacts = contacts.filter(contact => 
+                    contact.email.toLowerCase().includes(searchTerm) || 
+                    contact.phone.includes(searchTerm)
+                );
+            }
+            
+            // Rensa tabellen
+            tbody.innerHTML = '';
+            
+            // Visa kontakter eller tomt meddelande
+            if (filteredContacts.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="empty-state">
+                            ${contacts.length === 0 ? '📭 Inga kontanter ännu. Lägg till din första ovan!' : '🔍 Ingen sökträff. Prova något annat!'}
+                        </td>
+                    </tr>
+                `;
+            } else {
+                filteredContacts.forEach((contact, index) => {
+                    // Hitta original-index för borttagning
+                    const originalIndex = contacts.findIndex(c => c.email === contact.email && c.phone === contact.phone);
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td><strong>${escapeHtml(contact.email)}</strong><br><small style="color: #999;">Tillagd: ${contact.date}</small></td>
+                        <td><strong style="font-size: 18px; color: #667eea;">${escapeHtml(contact.phone)}</strong></td>
+                        <td><button class="delete-btn" onclick="deleteContact(${originalIndex})">🗑️ Ta bort</button></td>
+                    `;
+                });
+            }
+            
+            // Uppdatera statistik
+            const stats = document.getElementById('stats');
+            if (filteredContacts.length === contacts.length) {
+                stats.textContent = `📊 Visar ${contacts.length} av ${contacts.length} kontakter totalt`;
+            } else {
+                stats.textContent = `📊 Visar ${filteredContacts.length} av ${contacts.length} kontakter (sökning aktiv)`;
+            }
+        }
+        
+        // Skydda mot XSS-attacker
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Ladda kontakter när sidan startar
+        loadContacts();
+    </script>
+</body>
+</html>
