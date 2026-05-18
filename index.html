@@ -1,570 +1,357 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kappa kundkontakter</title>
-        <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kappa kundkontakter</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000000;
-            min-height: 100vh;
-            padding: 20px;
-        }
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d3a;
+      --accent: #4f8ef7;
+      --accent2: #7c5cbf;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --success: #34d399;
+      --danger: #f87171;
+      --radius: 12px;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
 
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #ffffff 0%, #00b7ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    header {
+      margin-bottom: 2.5rem;
+    }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.8;
-            color: #cccccc;
-        }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(120deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .form-card {
-            background: #1a1a1a;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid #333;
-        }
+    header p {
+      color: var(--muted);
+      margin-top: 0.4rem;
+      font-size: 0.95rem;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #ffffff;
-        }
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            background: #2a2a2a;
-            border: 2px solid #3a3a3a;
-            border-radius: 8px;
-            font-size: 16px;
-            color: white;
-            transition: border-color 0.3s;
-        }
+    .form-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
 
-        input:focus {
-            outline: none;
-            border-color: #ffffff;
-        }
+    .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
 
-        input::placeholder {
-            color: #666;
-        }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-        button {
-            background: linear-gradient(135deg, #ffffff 0%, #00b7ff 100%);
-            color: #000000;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+    input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
 
-        button:hover {
-            transform: translateY(-2px);
-        }
+    input:focus {
+      border-color: var(--accent);
+    }
 
-        .contacts-card {
-            background: #1a1a1a;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid #333;
-        }
+    input::placeholder { color: var(--muted); }
 
-        .contacts-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s, transform 0.1s;
+    }
 
-        .contacts-header h2 {
-            color: white;
-        }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .search-box {
-            padding: 8px 15px;
-            background: #2a2a2a;
-            border: 2px solid #3a3a3a;
-            border-radius: 8px;
-            width: 250px;
-            color: white;
-        }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      margin-top: 1rem;
+    }
 
-        .search-box:focus {
-            outline: none;
-            border-color: #ffffff;
-        }
+    .btn-primary:hover:not(:disabled) { opacity: 0.9; }
 
-        .search-box::placeholder {
-            color: #666;
-        }
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 0.3rem 0.7rem;
+      font-size: 0.8rem;
+    }
 
-        .contact-list {
-            overflow-x: auto;
-        }
+    .status {
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+      min-height: 1.2em;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    .status.ok { color: var(--success); }
+    .status.err { color: var(--danger); }
+    .status.loading { color: var(--muted); }
 
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #333;
-        }
+    .stats-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
 
-        th {
-            background: #0a0a0a;
-            font-weight: 600;
-            color: #ffffff;
-        }
+    .stat-chip {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
 
-        tr:hover {
-            background: #252525;
-        }
+    .stat-chip span { color: var(--text); font-weight: 600; }
 
-        td {
-            color: #e0e0e0;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
 
-        .delete-btn {
-            background: #ff4444;
-            padding: 5px 12px;
-            font-size: 14px;
-        }
+    thead th {
+      text-align: left;
+      padding: 0.6rem 0.8rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
 
-        .delete-btn:hover {
-            background: #cc0000;
-        }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
 
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(79,142,247,0.04); }
 
-        .stats {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #333;
-            color: #888;
-            font-weight: 500;
-        }
+    td {
+      padding: 0.75rem 0.8rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
 
-        @media (max-width: 768px) {
-            th, td {
-                padding: 10px;
-                font-size: 14px;
-            }
-            
-            .contacts-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .search-box {
-                width: 100%;
-            }
-        }
-    </style>
-    <!-- <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    td.actions { font-family: 'DM Sans', sans-serif; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+    .empty {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
 
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .form-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        .contacts-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .contacts-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .contacts-header h2 {
-            color: #333;
-        }
-
-        .search-box {
-            padding: 8px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            width: 250px;
-        }
-
-        .contact-list {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #555;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .delete-btn {
-            background: #dc3545;
-            padding: 5px 12px;
-            font-size: 14px;
-        }
-
-        .delete-btn:hover {
-            background: #c82333;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .stats {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
-            color: #666;
-            font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-            th, td {
-                padding: 10px;
-                font-size: 14px;
-            }
-            
-            .contacts-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .search-box {
-                width: 100%;
-            }
-        }
-    </style> -->
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📞 Kappa kundkontakter</h1>
-            <p>Dokumenterade reaches</p>
-        </div>
+<div class="container">
 
-        <div class="form-card">
-            <h2 style="margin-bottom: 20px; color: #333;">✉️ Lägg till ny kontakt</h2>
-            <div class="form-group">
-                <label>📧 E-postadress:</label>
-                <input type="email" id="emailInput" placeholder="t.ex. kund@exempel.se">
-            </div>
-            <div class="form-group">
-                <label>📱 Telefonnummer:</label>
-                <input type="tel" id="phoneInput" placeholder="t.ex. 0701234567">
-            </div>
-            <button onclick="addContact()">➕ Lägg till kontakt</button>
-        </div>
+  <header>
+    <h1>📞 Kappa kundkontakter</h1>
+    <p>Dokumenterade reaches — synkroniseras på alla enheter</p>
+  </header>
 
-        <div class="contacts-card">
-            <div class="contacts-header">
-                <h2>📋 Kontakter jag har mejlat</h2>
-                <input type="text" class="search-box" id="searchInput" placeholder="🔍 Sök på e-post eller telefon..." onkeyup="searchContacts()">
-            </div>
-            <div class="contact-list">
-                <table id="contactTable">
-                    <thead>
-                        <tr>
-                            <th>📧 E-post</th>
-                            <th>📱 Telefon</th>
-                            <th>🎯 Åtgärd</th>
-                        </tr>
-                    </thead>
-                    <tbody id="contactTableBody">
-                        <tr>
-                            <td colspan="3" class="empty-state">Inga kontanter ännu. Lägg till din första ovan! ✨</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="stats" id="stats">
-                Visar 0 kontakter
-            </div>
-        </div>
+  <!-- Lägg till kontakt -->
+  <div class="card">
+    <h2>✉️ Lägg till ny kontakt</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>E-postadress</label>
+        <input type="email" id="emailInput" placeholder="namn@exempel.se" />
+      </div>
+      <div class="form-group">
+        <label>Telefonnummer</label>
+        <input type="tel" id="phoneInput" placeholder="+46 70 123 45 67" />
+      </div>
     </div>
+    <button class="btn btn-primary" id="addBtn" onclick="addContact()">➕ Lägg till kontakt</button>
+    <div class="status" id="addStatus"></div>
+  </div>
 
-    <script>
-        // Ladda kontakter från localStorage eller börja med tom array
-        let contacts = [];
+  <!-- Kontaktlista -->
+  <div class="card">
+    <h2>📋 Kontakter jag har mejlat</h2>
+    <div class="stats-row">
+      <div class="stat-chip">Totalt: <span id="totalCount">–</span></div>
+    </div>
+    <div id="tableWrapper">
+      <div class="empty"><span class="spinner"></span> Laddar kontakter…</div>
+    </div>
+  </div>
 
-        // Ladda sparade kontakter när sidan laddas
-        function loadContacts() {
-            const saved = localStorage.getItem('farbrorsContacts');
-            if (saved) {
-                contacts = JSON.parse(saved);
-            }
-            displayContacts();
-        }
+</div>
 
-        // Spara kontakter till localStorage
-        function saveContacts() {
-            localStorage.setItem('farbrorsContacts', JSON.stringify(contacts));
-        }
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7hynDPtoSzWEN0xEvbs0VXmbUTW5T_Y7IxrRPoQ41Up9ncJurZlkQAvSGuFK4OOR4/exec";
 
-        // Lägg till ny kontakt
-        function addContact() {
-            const email = document.getElementById('emailInput').value.trim();
-            const phone = document.getElementById('phoneInput').value.trim();
-            
-            // Validera
-            if (!email) {
-                alert('❌ Var god fyll i e-postadress!');
-                return;
-            }
-            
-            if (!phone) {
-                alert('❌ Var god fyll i telefonnummer!');
-                return;
-            }
-            
-            // Kolla om e-post redan finns
-            const exists = contacts.find(c => c.email.toLowerCase() === email.toLowerCase());
-            if (exists) {
-                alert('⚠️ Den här e-postadressen finns redan i listan!');
-                return;
-            }
-            
-            // Lägg till ny kontakt
-            contacts.push({
-                email: email,
-                phone: phone,
-                date: new Date().toLocaleDateString('sv-SE')
-            });
-            
-            // Spara och uppdatera
-            saveContacts();
-            displayContacts();
-            
-            // Rensa inputfälten
-            document.getElementById('emailInput').value = '';
-            document.getElementById('phoneInput').value = '';
-            
-            // Fokusera tillbaka på email-fältet
-            document.getElementById('emailInput').focus();
-            
-            alert('✅ Kontakt tillagd! Nu kan farbror se numret.');
-        }
-        
-        // Ta bort kontakt
-        function deleteContact(index) {
-            if (confirm('Är du säker på att du vill ta bort den här kontakten?')) {
-                contacts.splice(index, 1);
-                saveContacts();
-                displayContacts();
-            }
-        }
-        
-        // Sökfunktion
-        function searchContacts() {
-            displayContacts();
-        }
-        
-        // Visa alla kontakter i tabellen
-        function displayContacts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const tbody = document.getElementById('contactTableBody');
-            
-            // Filtrera kontakter baserat på sökning
-            let filteredContacts = contacts;
-            if (searchTerm) {
-                filteredContacts = contacts.filter(contact => 
-                    contact.email.toLowerCase().includes(searchTerm) || 
-                    contact.phone.includes(searchTerm)
-                );
-            }
-            
-            // Rensa tabellen
-            tbody.innerHTML = '';
-            
-            // Visa kontakter eller tomt meddelande
-            if (filteredContacts.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="3" class="empty-state">
-                            ${contacts.length === 0 ? '📭 Inga kontanter ännu. Lägg till din första ovan!' : '🔍 Ingen sökträff. Prova något annat!'}
-                        </td>
-                    </tr>
-                `;
-            } else {
-                filteredContacts.forEach((contact, index) => {
-                    // Hitta original-index för borttagning
-                    const originalIndex = contacts.findIndex(c => c.email === contact.email && c.phone === contact.phone);
-                    const row = tbody.insertRow();
-                    row.innerHTML = `
-                        <td><strong>${escapeHtml(contact.email)}</strong><br><small style="color: #999;">Tillagd: ${contact.date}</small></td>
-                        <td><strong style="font-size: 18px; color: #667eea;">${escapeHtml(contact.phone)}</strong></td>
-                        <td><button class="delete-btn" onclick="deleteContact(${originalIndex})">🗑️ Ta bort</button></td>
-                    `;
-                });
-            }
-            
-            // Uppdatera statistik
-            const stats = document.getElementById('stats');
-            if (filteredContacts.length === contacts.length) {
-                stats.textContent = `📊 Visar ${contacts.length} av ${contacts.length} kontakter totalt`;
-            } else {
-                stats.textContent = `📊 Visar ${filteredContacts.length} av ${contacts.length} kontakter (sökning aktiv)`;
-            }
-        }
-        
-        // Skydda mot XSS-attacker
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        // Ladda kontakter när sidan startar
-        loadContacts();
-    </script>
+  async function loadContacts() {
+    try {
+      const res = await fetch(SCRIPT_URL);
+      const data = await res.json();
+      renderTable(data);
+    } catch (e) {
+      document.getElementById("tableWrapper").innerHTML =
+        '<div class="empty">⚠️ Kunde inte ladda kontakter. Kontrollera Google Script.</div>';
+    }
+  }
+
+  function renderTable(contacts) {
+    document.getElementById("totalCount").textContent = contacts.length;
+
+    if (contacts.length === 0) {
+      document.getElementById("tableWrapper").innerHTML =
+        '<div class="empty">Inga kontakter ännu. Lägg till din första ovan! ✨</div>';
+      return;
+    }
+
+    let html = `<table>
+      <thead><tr>
+        <th>📧 E-post</th>
+        <th>📱 Telefon</th>
+      </tr></thead>
+      <tbody>`;
+
+    contacts.forEach(c => {
+      html += `<tr>
+        <td>${escHtml(c.email || "–")}</td>
+        <td>${escHtml(c.phone || "–")}</td>
+      </tr>`;
+    });
+
+    html += `</tbody></table>`;
+    document.getElementById("tableWrapper").innerHTML = html;
+  }
+
+  async function addContact() {
+    const email = document.getElementById("emailInput").value.trim();
+    const phone = document.getElementById("phoneInput").value.trim();
+    const status = document.getElementById("addStatus");
+    const btn = document.getElementById("addBtn");
+
+    if (!email && !phone) {
+      status.className = "status err";
+      status.textContent = "⚠️ Fyll i minst e-post eller telefonnummer.";
+      return;
+    }
+
+    btn.disabled = true;
+    status.className = "status loading";
+    status.innerHTML = '<span class="spinner"></span> Sparar…';
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, phone })
+      });
+
+      document.getElementById("emailInput").value = "";
+      document.getElementById("phoneInput").value = "";
+      status.className = "status ok";
+      status.textContent = "✅ Kontakt sparad!";
+
+      setTimeout(() => { status.textContent = ""; }, 3000);
+      setTimeout(loadContacts, 1500);
+    } catch (e) {
+      status.className = "status err";
+      status.textContent = "❌ Något gick fel. Försök igen.";
+    }
+
+    btn.disabled = false;
+  }
+
+  document.getElementById("emailInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") document.getElementById("phoneInput").focus();
+  });
+  document.getElementById("phoneInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") addContact();
+  });
+
+  function escHtml(str) {
+    return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+
+  loadContacts();
+</script>
 </body>
 </html>
